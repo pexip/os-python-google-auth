@@ -11,18 +11,21 @@ Build-Depends:
  python3-all,
  python3-setuptools,
 Build-Depends-Indep:
+ python3-aiohttp,
  python3-cachetools (>= 2.0.0),
  python3-certifi,
+ python3-cryptography,
  python3-flask,
  python3-mock,
- python3-oauth2client,
+ python3-openssl,
  python3-pyasn1,
  python3-pyasn1-modules (>= 0.2.1),
  python3-pytest,
  python3-pytest-localserver,
+ python3-pyu2f,
  python3-requests,
+ python3-responses,
  python3-rsa,
- python3-six,
  python3-urllib3,
 Standards-Version: 4.4.1
 Vcs-Browser: https://salsa.debian.org/openstack-team/python/python-google-auth
@@ -32,11 +35,16 @@ Homepage: https://github.com/GoogleCloudPlatform/google-auth-library-python
 Package: python3-google-auth
 Architecture: all
 Depends:
+ python3-aiohttp,
  python3-cachetools (>= 2.0.0),
+ python3-cryptography,
+ python3-openssl,
  python3-pyasn1,
  python3-pyasn1-modules (>= 0.2.1),
+ python3-pyu2f,
+ python3-requests,
+ python3-responses,
  python3-rsa,
- python3-six,
  ${misc:Depends},
  ${python3:Depends},
 Description: Google Authentication Library - Python 3.x

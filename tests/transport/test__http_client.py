@@ -1,4 +1,4 @@
-# Copyright 2016 Google Inc.
+# Copyright 2016 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
+import pytest  # type: ignore
 
 from google.auth import exceptions
 import google.auth.transport._http_client
@@ -26,6 +26,6 @@ class TestRequestResponse(compliance.RequestResponseTests):
     def test_non_http(self):
         request = self.make_request()
         with pytest.raises(exceptions.TransportError) as excinfo:
-            request(url='https://{}'.format(compliance.NXDOMAIN), method='GET')
+            request(url="https://{}".format(compliance.NXDOMAIN), method="GET")
 
-        assert excinfo.match('https')
+        assert excinfo.match("https")
