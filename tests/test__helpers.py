@@ -1,4 +1,4 @@
-# Copyright 2016 Google Inc.
+# Copyright 2016 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,9 +13,9 @@
 # limitations under the License.
 
 import datetime
+import urllib
 
-import pytest
-from six.moves import urllib
+import pytest  # type: ignore
 
 from google.auth import _helpers
 
@@ -51,25 +51,49 @@ def test_copy_docstring_non_existing():
         _helpers.copy_docstring(SourceClass)(func2)
 
 
+def test_parse_content_type_plain():
+    assert _helpers.parse_content_type("text/html") == "text/html"
+    assert _helpers.parse_content_type("application/xml") == "application/xml"
+    assert _helpers.parse_content_type("application/json") == "application/json"
+
+
+def test_parse_content_type_with_parameters():
+    content_type_html = "text/html; charset=UTF-8"
+    content_type_xml = "application/xml; charset=UTF-16; version=1.0"
+    content_type_json = "application/json; charset=UTF-8; indent=2"
+    assert _helpers.parse_content_type(content_type_html) == "text/html"
+    assert _helpers.parse_content_type(content_type_xml) == "application/xml"
+    assert _helpers.parse_content_type(content_type_json) == "application/json"
+
+
+def test_parse_content_type_missing_or_broken():
+    content_type_foo = None
+    content_type_bar = ""
+    content_type_baz = "1234"
+    content_type_qux = " ; charset=UTF-8"
+    assert _helpers.parse_content_type(content_type_foo) == "text/plain"
+    assert _helpers.parse_content_type(content_type_bar) == "text/plain"
+    assert _helpers.parse_content_type(content_type_baz) == "text/plain"
+    assert _helpers.parse_content_type(content_type_qux) == "text/plain"
+
+
 def test_utcnow():
     assert isinstance(_helpers.utcnow(), datetime.datetime)
 
 
 def test_datetime_to_secs():
-    assert _helpers.datetime_to_secs(
-        datetime.datetime(1970, 1, 1)) == 0
-    assert _helpers.datetime_to_secs(
-        datetime.datetime(1990, 5, 29)) == 643939200
+    assert _helpers.datetime_to_secs(datetime.datetime(1970, 1, 1)) == 0
+    assert _helpers.datetime_to_secs(datetime.datetime(1990, 5, 29)) == 643939200
 
 
 def test_to_bytes_with_bytes():
-    value = b'bytes-val'
+    value = b"bytes-val"
     assert _helpers.to_bytes(value) == value
 
 
 def test_to_bytes_with_unicode():
-    value = u'string-val'
-    encoded_value = b'string-val'
+    value = u"string-val"
+    encoded_value = b"string-val"
     assert _helpers.to_bytes(value) == encoded_value
 
 
@@ -79,13 +103,13 @@ def test_to_bytes_with_nonstring_type():
 
 
 def test_from_bytes_with_unicode():
-    value = u'bytes-val'
+    value = u"bytes-val"
     assert _helpers.from_bytes(value) == value
 
 
 def test_from_bytes_with_bytes():
-    value = b'string-val'
-    decoded_value = u'string-val'
+    value = b"string-val"
+    decoded_value = u"string-val"
     assert _helpers.from_bytes(value) == decoded_value
 
 
@@ -101,53 +125,49 @@ def _assert_query(url, expected):
 
 
 def test_update_query_params_no_params():
-    uri = 'http://www.google.com'
-    updated = _helpers.update_query(uri, {'a': 'b'})
-    assert updated == uri + '?a=b'
+    uri = "http://www.google.com"
+    updated = _helpers.update_query(uri, {"a": "b"})
+    assert updated == uri + "?a=b"
 
 
 def test_update_query_existing_params():
-    uri = 'http://www.google.com?x=y'
-    updated = _helpers.update_query(uri, {'a': 'b', 'c': 'd&'})
-    _assert_query(updated, {'x': ['y'], 'a': ['b'], 'c': ['d&']})
+    uri = "http://www.google.com?x=y"
+    updated = _helpers.update_query(uri, {"a": "b", "c": "d&"})
+    _assert_query(updated, {"x": ["y"], "a": ["b"], "c": ["d&"]})
 
 
 def test_update_query_replace_param():
-    base_uri = 'http://www.google.com'
-    uri = base_uri + '?x=a'
-    updated = _helpers.update_query(uri, {'x': 'b', 'y': 'c'})
-    _assert_query(updated, {'x': ['b'], 'y': ['c']})
+    base_uri = "http://www.google.com"
+    uri = base_uri + "?x=a"
+    updated = _helpers.update_query(uri, {"x": "b", "y": "c"})
+    _assert_query(updated, {"x": ["b"], "y": ["c"]})
 
 
 def test_update_query_remove_param():
-    base_uri = 'http://www.google.com'
-    uri = base_uri + '?x=a'
-    updated = _helpers.update_query(uri, {'y': 'c'}, remove=['x'])
-    _assert_query(updated, {'y': ['c']})
+    base_uri = "http://www.google.com"
+    uri = base_uri + "?x=a"
+    updated = _helpers.update_query(uri, {"y": "c"}, remove=["x"])
+    _assert_query(updated, {"y": ["c"]})
 
 
 def test_scopes_to_string():
     cases = [
-        ('', ()),
-        ('', []),
-        ('', ('',)),
-        ('', ['', ]),
-        ('a', ('a',)),
-        ('b', ['b', ]),
-        ('a b', ['a', 'b']),
-        ('a b', ('a', 'b')),
-        ('a b', (s for s in ['a', 'b'])),
+        ("", ()),
+        ("", []),
+        ("", ("",)),
+        ("", [""]),
+        ("a", ("a",)),
+        ("b", ["b"]),
+        ("a b", ["a", "b"]),
+        ("a b", ("a", "b")),
+        ("a b", (s for s in ["a", "b"])),
     ]
     for expected, case in cases:
         assert _helpers.scopes_to_string(case) == expected
 
 
 def test_string_to_scopes():
-    cases = [
-        ('', []),
-        ('a', ['a']),
-        ('a b c d e f', ['a', 'b', 'c', 'd', 'e', 'f']),
-    ]
+    cases = [("", []), ("a", ["a"]), ("a b c d e f", ["a", "b", "c", "d", "e", "f"])]
 
     for case, expected in cases:
         assert _helpers.string_to_scopes(case) == expected
@@ -155,15 +175,22 @@ def test_string_to_scopes():
 
 def test_padded_urlsafe_b64decode():
     cases = [
-        ('YQ==', b'a'),
-        ('YQ', b'a'),
-        ('YWE=', b'aa'),
-        ('YWE', b'aa'),
-        ('YWFhYQ==', b'aaaa'),
-        ('YWFhYQ', b'aaaa'),
-        ('YWFhYWE=', b'aaaaa'),
-        ('YWFhYWE', b'aaaaa'),
+        ("YQ==", b"a"),
+        ("YQ", b"a"),
+        ("YWE=", b"aa"),
+        ("YWE", b"aa"),
+        ("YWFhYQ==", b"aaaa"),
+        ("YWFhYQ", b"aaaa"),
+        ("YWFhYWE=", b"aaaaa"),
+        ("YWFhYWE", b"aaaaa"),
     ]
 
     for case, expected in cases:
         assert _helpers.padded_urlsafe_b64decode(case) == expected
+
+
+def test_unpadded_urlsafe_b64encode():
+    cases = [(b"", b""), (b"a", b"YQ"), (b"aa", b"YWE"), (b"aaa", b"YWFh")]
+
+    for case, expected in cases:
+        assert _helpers.unpadded_urlsafe_b64encode(case) == expected

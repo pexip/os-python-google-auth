@@ -1,15 +1,11 @@
 Google Auth Python Library
 ==========================
 
-|build| |docs| |pypi|
+|pypi|
 
 This library simplifies using Google's various server-to-server authentication
 mechanisms to access Google APIs.
 
-.. |build| image:: https://travis-ci.org/GoogleCloudPlatform/google-auth-library-python.svg?branch=master
-   :target: https://travis-ci.org/GoogleCloudPlatform/google-auth-library-python
-.. |docs| image:: https://readthedocs.org/projects/google-auth/badge/?version=latest
-   :target: https://google-auth.readthedocs.io/en/latest/
 .. |pypi| image:: https://img.shields.io/pypi/v/google-auth.svg
    :target: https://pypi.python.org/pypi/google-auth
 
@@ -24,19 +20,60 @@ You can install using `pip`_::
 
 For more information on setting up your Python development environment, please refer to `Python Development Environment Setup Guide`_ for Google Cloud Platform.
 
-.. _`Python Development Environment Setup Guide`: https://cloud.google.com/python/setup
+.. _`Python Development Environment Setup Guide`: https://cloud.google.com/python/docs/setup
+
+Extras
+------
+
+google-auth has few extras that you can install. For example::
+
+    $ pip install google-auth[pyopenssl]
+
+Note that the extras pyopenssl and enterprise_cert should not be used together because they use conflicting versions of `cryptography`_.
+
+.. _`cryptography`: https://cryptography.io/en/latest/
+
+Supported Python Versions
+^^^^^^^^^^^^^^^^^^^^^^^^^
+Python >= 3.7
+
+**NOTE**:
+Python 3.7 was marked as `unsupported`_ by the python community in June 2023.
+We recommend that all developers upgrade to Python 3.8 and newer as soon as
+they can. Support for Python 3.7 will be removed from this library after
+January 1 2024. Previous releases that support Python 3.7 will continue to be available
+for download, but releases after January 1 2024 will only target Python 3.8 and
+newer.
+
+.. _unsupported: https://devguide.python.org/versions/#unsupported-versions
+
+Unsupported Python Versions
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- Python == 2.7:  The last version of this library with support for Python 2.7
+  was `google.auth == 1.34.0`.
+
+- Python 3.5:   The last version of this library with support for Python 3.5
+  was `google.auth == 1.23.0`.
+
+- Python 3.6:   The last version of this library with support for Python 3.6
+  was `google.auth == 2.22.0`.
 
 Documentation
 -------------
 
-Google Auth Python Library has usage and reference documentation at `google-auth.readthedocs.io <https://google-auth.readthedocs.io>`_.
+Google Auth Python Library has usage and reference documentation at https://googleapis.dev/python/google-auth/latest/index.html.
 
-Maintainers
------------
+Current Maintainers
+-------------------
+- googleapis-auth@google.com
 
-- `@jonparrott <https://github.com/jonparrott>`_ (Jon Wayne Parrott)
+Authors
+-------
+
+- `@theacodes <https://github.com/theacodes>`_ (Thea Flowers)
 - `@dhermes <https://github.com/dhermes>`_ (Danny Hermes)
 - `@lukesneeringer <https://github.com/lukesneeringer>`_ (Luke Sneeringer)
+- `@busunkim96 <https://github.com/busunkim96>`_ (Bu Sun Kim)
 
 Contributing
 ------------
@@ -45,11 +82,11 @@ Contributions to this library are always welcome and highly encouraged.
 
 See `CONTRIBUTING.rst`_ for more information on how to get started.
 
-.. _CONTRIBUTING.rst: https://github.com/GoogleCloudPlatform/google-auth-library-python/blob/master/CONTRIBUTING.rst
+.. _CONTRIBUTING.rst: https://github.com/googleapis/google-auth-library-python/blob/main/CONTRIBUTING.rst
 
 License
 -------
 
 Apache 2.0 - See `the LICENSE`_ for more information.
 
-.. _the LICENSE: https://github.com/GoogleCloudPlatform/google-auth-library-python/blob/master/LICENSE
+.. _the LICENSE: https://github.com/googleapis/google-auth-library-python/blob/main/LICENSE
