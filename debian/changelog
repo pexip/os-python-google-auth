@@ -1,3 +1,9 @@
+python-google-auth (2.28.2-3+pexip25u3) pexip-trixie; urgency=medium
+
+  * Trixie build for product distribution
+
+ -- Mark Hymers <mark.hymers@pexip.com>  Thu, 04 Dec 2025 13:48:29 +0000
+
 python-google-auth (2.28.2-3+pexip25u2) pexip-trixie; urgency=medium
 
   * Fix test compatibility with cryptography 46.x.
