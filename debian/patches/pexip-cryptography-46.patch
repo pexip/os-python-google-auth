@@ -1,3 +1,5 @@
+Fix test compatibility with cryptography 46.x.
+
 --- a/tests/test__service_account_info.py
 +++ b/tests/test__service_account_info.py
 @@ -53,7 +53,7 @@
